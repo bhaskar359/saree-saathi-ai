@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+# AI model cache
+.cache/
+models/
+
+# OS
+.DS_Store
+
+data/sarees-with-embeddings.json
