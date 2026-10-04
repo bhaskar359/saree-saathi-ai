@@ -2,6 +2,7 @@ import { understandQuery } from "./query-understanding.js";
 import { extractConstraints } from "./query-constraints.js";
 import { searchSarees } from "./services/saree-search.js";
 import { generateRecommendation } from "./services/recommendation.js";
+import { formatSearchResult } from "./utils/format-search-result.js";
 
 export async function aiSearch(userQuery) {
 	console.log("\nUser query:");
@@ -28,13 +29,14 @@ export async function aiSearch(userQuery) {
 		available: true,
 		limit: 5,
 	});
+	const formattedResults = results.map(formatSearchResult);
 
 	const recommendation = await generateRecommendation(userQuery, results);
 
 	return {
 		query: parsedQuery,
 		constraints,
-		results,
+		results: formattedResults,
 		recommendation,
 	};
 }

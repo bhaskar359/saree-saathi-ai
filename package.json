@@ -14,7 +14,8 @@
 		"search:test": "node src/test-search.js",
 		"gemma:test": "node src/test-gemma.js",
 		"query:test": "node src/test-query-understanding.js",
-		"ai-search:test": "node src/test-ai-search.js"
+		"ai-search:test": "node src/test-ai-search.js",
+		"server": "node src/server.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -23,6 +24,7 @@
 	"dependencies": {
 		"@huggingface/transformers": "^4.3.0",
 		"dotenv": "^18.0.5",
+		"express": "^5.2.1",
 		"mongodb": "^7.7.0",
 		"ollama": "^0.6.4"
 	}
