@@ -1,4 +1,6 @@
 import ollama from "ollama";
+import { withTimeout } from "../utils/with-timeout.js";
+import { AppError } from "../errors/AppError.js";
 
 export async function generateRecommendation(userQuery, sarees) {
 	const sareeContext = sarees
@@ -20,13 +22,14 @@ Available: ${saree.available}
 		)
 		.join("\n");
 
-	const response = await ollama.chat({
-		model: "gemma3:4b",
+	const response = await withTimeout(
+		ollama.chat({
+			model: "gemma3:4b",
 
-		messages: [
-			{
-				role: "system",
-				content: `
+			messages: [
+				{
+					role: "system",
+					content: `
 You are Saree Saathi, a helpful saree shopping assistant.
 
 Answer the user's request using ONLY the saree information provided in the context.
@@ -44,10 +47,10 @@ IMPORTANT RULES:
 9. Do not make unsupported comparisons.
 10. Do not expose internal implementation details such as embeddings, vector search, MongoDB, or model names.
 `,
-			},
-			{
-				role: "user",
-				content: `
+				},
+				{
+					role: "user",
+					content: `
       USER REQUEST:
       ${userQuery}
       
@@ -64,9 +67,16 @@ IMPORTANT RULES:
       Using ONLY the catalog data above, recommend the most suitable saree.
       Do not invent any information.
       `,
-			},
-		],
-	});
+				},
+			],
+		}),
+		15000,
+		new AppError(
+			"AI recommendation service timed out.",
+			504,
+			"AI_RECOMMENDATION_TIMEOUT",
+		),
+	);
 
 	return response.message.content;
 }

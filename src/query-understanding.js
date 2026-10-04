@@ -1,4 +1,6 @@
 import ollama from "ollama";
+import { withTimeout } from "./utils/with-timeout.js";
+import { AppError } from "./errors/AppError.js";
 
 const QUERY_SCHEMA = {
 	type: "object",
@@ -14,13 +16,14 @@ const QUERY_SCHEMA = {
 };
 
 export async function understandQuery(userQuery) {
-	const response = await ollama.chat({
-		model: "gemma3:4b",
+	const response = await withTimeout(
+		ollama.chat({
+			model: "gemma3:4b",
 
-		messages: [
-			{
-				role: "system",
-				content: `You are the query-understanding component of Saree Saathi AI.
+			messages: [
+				{
+					role: "system",
+					content: `You are the query-understanding component of Saree Saathi AI.
 
         Your job is to convert a user's saree request into two fields:
         
@@ -89,15 +92,18 @@ export async function understandQuery(userQuery) {
         }
         
         Always return valid JSON matching the required schema.`,
-			},
-			{
-				role: "user",
-				content: userQuery,
-			},
-		],
+				},
+				{
+					role: "user",
+					content: userQuery,
+				},
+			],
 
-		format: QUERY_SCHEMA,
-	});
+			format: QUERY_SCHEMA,
+		}),
+		15000,
+		new AppError("AI service timed out.", 504, "AI_SERVICE_TIMEOUT"),
+	);
 
 	return JSON.parse(response.message.content);
 }

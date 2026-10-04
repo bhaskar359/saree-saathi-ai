@@ -1,5 +1,6 @@
 import express from "express";
 import searchRouter from "./routes/search.js";
+import { errorHandler } from "./middleware/error-handler.js";
 
 const app = express();
 
@@ -25,13 +26,7 @@ app.use((req, res) => {
 	});
 });
 
-app.use((err, req, res, next) => {
-	console.error("Unhandled error:", err);
-
-	res.status(500).json({
-		error: "Internal server error",
-	});
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
 	console.log(`Saree Saathi API running on http://localhost:${PORT}`);

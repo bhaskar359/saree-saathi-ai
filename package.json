@@ -4,17 +4,6 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"embed": "node src/embedding.js",
-		"catalog:embed": "node src/generate-catalog-embeddings.js",
-		"search": "node src/search.js",
-		"mongo:test": "node src/test-mongodb.js",
-		"mongo:import": "node src/import-sarees.js",
-		"vector:search": "node src/vector-search.js",
-		"search:test": "node src/test-search.js",
-		"gemma:test": "node src/test-gemma.js",
-		"query:test": "node src/test-query-understanding.js",
-		"ai-search:test": "node src/test-ai-search.js",
 		"server": "node src/server.js"
 	},
 	"keywords": [],
