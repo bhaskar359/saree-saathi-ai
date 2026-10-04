@@ -15,7 +15,7 @@ const QUERY_SCHEMA = {
 
 export async function understandQuery(userQuery) {
 	const response = await ollama.chat({
-		model: "gemma3:1b",
+		model: "gemma3:4b",
 
 		messages: [
 			{

@@ -16,3 +16,10 @@ result.results.forEach((saree, index) => {
 	console.log(`   Score: ${saree.score.toFixed(4)}`);
 	console.log();
 });
+
+// Print recommendation ONCE
+console.log("================================");
+console.log("AI RECOMMENDATION");
+console.log("================================\n");
+
+console.log(result.recommendation);
