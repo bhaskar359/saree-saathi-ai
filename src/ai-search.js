@@ -1,26 +1,36 @@
 import { understandQuery } from "./query-understanding.js";
+import { extractConstraints } from "./query-constraints.js";
 import { searchSarees } from "./services/saree-search.js";
 
 export async function aiSearch(userQuery) {
 	console.log("\nUser query:");
 	console.log(userQuery);
 
-	// 1. Understand the user's request using Gemma
+	// AI-based semantic understanding
 	const parsedQuery = await understandQuery(userQuery);
 
 	console.log("\nGemma understood:");
 	console.log(JSON.stringify(parsedQuery, null, 2));
 
-	// 2. Search the saree catalog using semantic search + exact filters
+	// Deterministic extraction of explicit constraints
+	const constraints = extractConstraints(userQuery);
+
+	console.log("\nHard constraints:");
+	console.log(JSON.stringify(constraints, null, 2));
+
+	// Hybrid search
 	const results = await searchSarees({
 		query: parsedQuery.semanticQuery,
 		maxPrice: parsedQuery.maxPrice,
+		fabric: constraints.fabric,
+		state: constraints.state,
 		available: true,
 		limit: 5,
 	});
 
 	return {
 		query: parsedQuery,
+		constraints,
 		results,
 	};
 }

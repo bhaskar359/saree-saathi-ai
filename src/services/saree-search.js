@@ -41,6 +41,8 @@ async function getMongoClient() {
 export async function searchSarees({
 	query,
 	maxPrice,
+	fabric,
+	state,
 	available = true,
 	limit = 5,
 }) {
@@ -67,11 +69,21 @@ export async function searchSarees({
 
 	const filters = [];
 
-	if (maxPrice !== undefined) {
+	if (maxPrice !== undefined && maxPrice !== null) {
 		filters.push({
-			price: {
-				$lte: maxPrice,
-			},
+			price: { $lte: maxPrice },
+		});
+	}
+
+	if (fabric) {
+		filters.push({
+			fabric,
+		});
+	}
+
+	if (state) {
+		filters.push({
+			state,
 		});
 	}
 
